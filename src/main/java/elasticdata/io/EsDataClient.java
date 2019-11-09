@@ -39,8 +39,18 @@ public class EsDataClient {
             throw new TaskException(e);
         }
     }
-    public TaskDto stopTask(String taskId) {
-        return new TaskDto();
+    public TaskDto stopTask(String taskId) throws TaskException {
+        try {
+            OkHttpClient client = new OkHttpClient();
+            RequestBody body = RequestBody.create("{}", JSON);
+            Request request = new Request.Builder()
+                    .url(this.endpoint + "/task/stop/" + taskId)
+                    .post(body)
+                    .build();
+            return parseResponseTaskDto(client, request);
+        } catch (Exception e) {
+            throw new TaskException(e);
+        }
     }
     public TaskDto getTask(String taskId) throws TaskException {
         try {

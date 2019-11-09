@@ -4,13 +4,13 @@ import elasticdata.io.EsDataClient;
 import elasticdata.io.dto.TaskDto;
 import elasticdata.io.exception.TaskException;
 
-public class ExampleGetTask {
+public class StopTaskExample {
 
     public static void main(String[] args) {
         EsDataClient esDataClient = new EsDataClient("publicKey", "secretKey");
         try {
             String taskId = "5dc6be9d5b809200017dab11";
-            TaskDto taskDto = esDataClient.getTask(taskId);
+            TaskDto taskDto = esDataClient.stopTask(taskId);
             System.out.println("task run successful, hookUrl = " + taskDto.hookUrl);
             System.out.println("id = " + taskDto.id);
             System.out.println("status: " + taskDto.status);

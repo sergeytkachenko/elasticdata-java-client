@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class ExampleRunTask {
+public class RunTaskExample {
 
     public static void main(String[] args) {
         EsDataClient esDataClient = new EsDataClient("publicKey", "secretKey");
