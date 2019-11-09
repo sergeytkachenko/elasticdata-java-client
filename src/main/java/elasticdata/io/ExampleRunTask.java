@@ -14,7 +14,7 @@ import java.util.List;
 public class ExampleRunTask {
 
     public static void main(String[] args) {
-        EsDataClient esDataClient = new EsDataClient("https://app.elasticdata.io/api", "publicKey", "secretKey");
+        EsDataClient esDataClient = new EsDataClient("publicKey", "secretKey");
         try {
             String pipelineId = "5dac67c0e3e69c0001489c1f";
             RunTaskDto runTaskDto = getRunTaskDto();

@@ -17,12 +17,11 @@ public class EsDataClient {
     public static final MediaType JSON
             = MediaType.get("application/json; charset=utf-8");
 
-    private String endpoint;
+    private String endpoint = "https://app.elasticdata.io/api";
     private String key;
     private String secret;
 
-    public EsDataClient(String endpoint, String key, String secret) {
-        this.endpoint = endpoint;
+    public EsDataClient(String key, String secret) {
         this.key = key;
         this.secret = secret;
     }
