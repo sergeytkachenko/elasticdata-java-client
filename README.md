@@ -2,7 +2,7 @@
 
 | Support API  |
 | ------------- |
-| run task by pipelineId  |
+| run task by pipelineId, with supports json patch for pipeline commands |
 | stop task by taskId  |
 | get task by taskId  |
 | get last data by pipelineId  |
