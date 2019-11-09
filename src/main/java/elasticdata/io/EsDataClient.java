@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import elasticdata.io.dto.ErrorMessageDto;
 import elasticdata.io.dto.RunTaskDto;
 import elasticdata.io.dto.TaskDto;
-import elasticdata.io.exception.RunTaskException;
+import elasticdata.io.exception.TaskException;
 import okhttp3.*;
 
 import java.io.IOException;
@@ -26,7 +26,7 @@ public class EsDataClient {
         this.secret = secret;
     }
 
-    public TaskDto runTask(String pipelineId, RunTaskDto runTaskDto) throws RunTaskException {
+    public TaskDto runTask(String pipelineId, RunTaskDto runTaskDto) throws TaskException {
         try {
             OkHttpClient client = new OkHttpClient();
             RequestBody body = RequestBody.create(runTaskDto.toJson(), JSON);
@@ -34,27 +34,40 @@ public class EsDataClient {
                     .url(this.endpoint + "/pipeline/run/" + pipelineId)
                     .post(body)
                     .build();
-            String json = null;
-            try (Response response = client.newCall(request).execute()) {
-                ResponseBody responseBody = response.body();
-                json = Objects.requireNonNull(responseBody).string();
-                return this.castToTaskDto(json);
-            } catch (Exception e) {
-                throw new RunTaskException(this.castToErrorMessageDto(json));
-            } finally {
-                client.dispatcher().executorService().shutdown();
-                client.connectionPool().evictAll();
-            }
+            return parseResponseTaskDto(client, request);
         } catch (Exception e) {
-            throw new RunTaskException(e);
+            throw new TaskException(e);
         }
     }
     public TaskDto stopTask(String taskId) {
         return new TaskDto();
     }
-    public TaskDto getTask(String taskId) {
-        return new TaskDto();
+    public TaskDto getTask(String taskId) throws TaskException {
+        try {
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url(this.endpoint + "/task/status/" + taskId)
+                    .build();
+            return parseResponseTaskDto(client, request);
+        } catch (Exception e) {
+            throw new TaskException(e);
+        }
     }
+
+    private TaskDto parseResponseTaskDto(OkHttpClient client, Request request) throws TaskException, IOException {
+        String json = null;
+        try (Response response = client.newCall(request).execute()) {
+            ResponseBody responseBody = response.body();
+            json = Objects.requireNonNull(responseBody).string();
+            return this.castToTaskDto(json);
+        } catch (Exception e) {
+            throw new TaskException(this.castToErrorMessageDto(json));
+        } finally {
+            client.dispatcher().executorService().shutdown();
+            client.connectionPool().evictAll();
+        }
+    }
+
     public List<HashMap<String, Object>> getLastData(String pipelineId) {
         return new ArrayList<>();
     }

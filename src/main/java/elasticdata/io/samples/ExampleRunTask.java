@@ -1,15 +1,14 @@
-package elasticdata.io;
+package elasticdata.io.samples;
 
+import elasticdata.io.EsDataClient;
+import elasticdata.io.RunTaskDtoBuilder;
 import elasticdata.io.dto.RunTaskDto;
 import elasticdata.io.dto.TaskDto;
-import elasticdata.io.exception.RunTaskException;
+import elasticdata.io.exception.TaskException;
 import org.jetbrains.annotations.NotNull;
 
-import javax.json.*;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 public class ExampleRunTask {
 
@@ -22,8 +21,8 @@ public class ExampleRunTask {
             System.out.println("task run successful, hookUrl = " + taskDto.hookUrl);
             System.out.println("id = " + taskDto.id);
             System.out.println("status: " + taskDto.status);
-        } catch (RunTaskException e) {
-            System.out.println("task run fail, more error description in RunTaskException");
+        } catch (TaskException e) {
+            System.out.println("task run fail, more error description in TaskException");
             System.out.println(e);
         }
     }
