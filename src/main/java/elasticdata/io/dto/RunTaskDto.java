@@ -11,9 +11,13 @@ public class RunTaskDto {
     public String hookUrl;
     public List<HashMap<String, Object>> jsonCommandsPatch;
 
-    public RunTaskDto(String hookUrl, List<HashMap<String, Object>> jsonCommandsPatch) {
+    public RunTaskDto(String hookUrl, List<HashMap<String, Object>> patch) {
         this.hookUrl = hookUrl;
-        this.jsonCommandsPatch = jsonCommandsPatch;
+        this.jsonCommandsPatch = patch;
+    }
+
+    public RunTaskDto(List<HashMap<String, Object>> patch) {
+        this.jsonCommandsPatch = patch;
     }
 
     public String toJson() throws JsonProcessingException {

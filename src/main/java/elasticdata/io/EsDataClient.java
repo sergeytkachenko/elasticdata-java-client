@@ -37,10 +37,14 @@ public class EsDataClient {
                     .build();
             String json = null;
             try (Response response = client.newCall(request).execute()) {
-                json = Objects.requireNonNull(response.body()).string();
+                ResponseBody responseBody = response.body();
+                json = Objects.requireNonNull(responseBody).string();
                 return this.castToTaskDto(json);
             } catch (Exception e) {
                 throw new RunTaskException(this.castToErrorMessageDto(json));
+            } finally {
+                client.dispatcher().executorService().shutdown();
+                client.connectionPool().evictAll();
             }
         } catch (Exception e) {
             throw new RunTaskException(e);

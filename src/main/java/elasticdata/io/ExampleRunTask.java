@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ExampleRunTask {
+
     public static void main(String[] args) {
         EsDataClient esDataClient = new EsDataClient("https://app.elasticdata.io/api", "publicKey", "secretKey");
         try {
@@ -29,22 +30,21 @@ public class ExampleRunTask {
 
     @NotNull
     private static RunTaskDto getRunTaskDto() {
-        String hookUrl = "https://my-site.com.ua/callback/task";
-        List<HashMap<String, Object>> patch = getCommandsPatch();
-        return new RunTaskDto(hookUrl, patch);
+        RunTaskDtoBuilder runTaskDtoBuilder = new RunTaskDtoBuilder();
+        return runTaskDtoBuilder
+                .setHookUrl("https://my-site.com.ua/callback/task")
+                .addCommandPatch(getUrlPatch())
+                .build();
     }
 
     @NotNull
-    private static List<HashMap<String, Object>> getCommandsPatch() {
-        List<HashMap<String, Object>> patch = new ArrayList<>();
+    private static HashMap<String, Object> getUrlPatch() {
         // create url patch command
         // see details of the path - http://jsonpatch.com/
         HashMap<String, Object> urlPatch = new HashMap<>();
         urlPatch.put("op", "replace");
         urlPatch.put("path", "/commands/0/params/urls");
         urlPatch.put("value", Arrays.asList("https://google.com.ua", "https://yandex.com.ua"));
-        // add urlPatch to root patch
-        patch.add(urlPatch);
-        return patch;
+        return urlPatch;
     }
 }
