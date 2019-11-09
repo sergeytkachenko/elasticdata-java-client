@@ -63,6 +63,28 @@ public class EsDataClient {
             throw new TaskException(e);
         }
     }
+    public List<HashMap<String, Object>> getLastData(String pipelineId) throws Exception {
+        try {
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url(this.endpoint + "/pipeline/data/" + pipelineId)
+                    .build();
+            return parseResponseData(client, request);
+        } catch (Exception e){
+            throw new Exception(e);
+        }
+    }
+
+    private List<HashMap<String, Object>> parseResponseData(OkHttpClient client, Request request) throws Exception {
+        try (Response response = client.newCall(request).execute()) {
+            ResponseBody responseBody = response.body();
+            String json = Objects.requireNonNull(responseBody).string();
+            return this.castToData(json);
+        } finally {
+            client.dispatcher().executorService().shutdown();
+            client.connectionPool().evictAll();
+        }
+    }
 
     private TaskDto parseResponseTaskDto(OkHttpClient client, Request request) throws TaskException, IOException {
         String json = null;
@@ -78,14 +100,16 @@ public class EsDataClient {
         }
     }
 
-    public List<HashMap<String, Object>> getLastData(String pipelineId) {
-        return new ArrayList<>();
+    private List<HashMap<String, Object>> castToData (String json) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(json, List.class);
     }
 
     private TaskDto castToTaskDto (String json) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(json, TaskDto.class);
     }
+
     private ErrorMessageDto castToErrorMessageDto (String json) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(json, ErrorMessageDto.class);
