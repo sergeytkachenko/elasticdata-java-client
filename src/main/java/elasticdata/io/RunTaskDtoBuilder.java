@@ -9,9 +9,15 @@ import java.util.List;
 public class RunTaskDtoBuilder {
     private String hookUrl;
     private List<HashMap<String, Object>> patch;
+    private Boolean withoutDependencies;
 
     public RunTaskDtoBuilder() {
         this.patch = new ArrayList<>();
+    }
+
+    public RunTaskDtoBuilder withoutDependencies() {
+        this.withoutDependencies = true;
+        return this;
     }
 
     public RunTaskDtoBuilder setHookUrl(String hookUrl) {
@@ -28,6 +34,6 @@ public class RunTaskDtoBuilder {
         if (hookUrl == null) {
             return new RunTaskDto(patch);
         }
-        return new RunTaskDto(hookUrl, patch);
+        return new RunTaskDto(hookUrl, patch, withoutDependencies);
     }
 }
