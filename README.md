@@ -32,7 +32,7 @@ add to pom.xml:
     <dependency>
         <groupId>com.github.sergeytkachenko</groupId>
         <artifactId>elasticdata-java-client</artifactId>
-        <version>v1.0</version>
+        <version>v1.1</version>
     </dependency>
 ```
 
