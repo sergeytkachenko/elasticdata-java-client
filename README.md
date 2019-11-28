@@ -22,7 +22,7 @@ repositories {
 ```
 dependencies {
     ...
-    implementation 'com.github.stkachenko:elasticdata-java-client:v1.0'
+    implementation 'com.github.stkachenko:elasticdata-java-client:v1.1'
 }
 ```
 ##### maven
